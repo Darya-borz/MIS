@@ -1,0 +1,255 @@
+/* Каталог самолетов */
+.catalog {
+    padding: 100px 20px;
+    background-color: #f9fbfd;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-title h2 {
+    font-size: 2.2rem;
+    color: #003366;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.section-title p {
+    color: #555;
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+.aircraft-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.aircraft-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e1e5eb;
+    display: flex;
+    flex-direction: column;
+}
+
+.aircraft-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+.aircraft-image {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+}
+
+.aircraft-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    object-position: center 30%;
+}
+
+.aircraft-card:hover .aircraft-image img {
+    transform: scale(1.08);
+}
+
+.aircraft-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 51, 102, 0.1);
+    transition: background 0.3s ease;
+}
+
+.aircraft-card:hover .aircraft-image::after {
+    background: rgba(0, 51, 102, 0.3);
+}
+
+.name-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 51, 102, 0.8);
+    color: white;
+    padding: 12px 15px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    z-index: 2;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.aircraft-card:hover .name-label {
+    transform: translateY(0);
+}
+
+.aircraft-info {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.aircraft-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #003366;
+    font-weight: 600;
+}
+
+.aircraft-info ul {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.aircraft-info li {
+    margin-bottom: 10px;
+    display: flex;
+    font-size: 0.95rem;
+}
+
+.aircraft-info li strong {
+    display: inline-block;
+    width: 120px;
+    color: #555;
+    font-weight: 500;
+}
+
+.aircraft-description {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.select-btn {
+    display: block;
+    width: 100%;
+    background: #0069d9;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: auto;
+}
+
+.select-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .aircraft-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .aircraft-image {
+        height: 180px;
+    }
+    
+    .section-title h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .catalog {
+        padding: 60px 15px;
+    }
+    
+    .aircraft-info {
+        padding: 20px;
+    }
+    
+    .aircraft-info li {
+        font-size: 0.85rem;
+    }
+    
+    .aircraft-info li strong {
+        width: 100px;
+    }
+}
+.aircraft-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.5;
+}
+
+.aircraft-title {
+    color: #003366;
+    margin: 0 0 15px 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.spec-label {
+    color: #555;
+    font-weight: 500;
+    text-align: right;
+}
+
+.spec-value {
+    color: #222;
+    font-weight: 400;
+}
+
+.aircraft-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 15px 0;
+    line-height: 1.4;
+}
+
+.select-btn {
+    background: #0069d9;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.select-btn:hover {
+    background: #0056b3;
+}
