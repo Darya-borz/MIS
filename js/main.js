@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             range: "6000 км",
             passengers: "211",
             description: "Новейший российский авиалайнер",
-            image: "./img/Irkut_MC-21-300.webp",
+            image: "./img/Irkut MC-21-300.webp",
             baseRunway: 2200
         },
         {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
             range: "11500 км",
             passengers: "300",
             description: "Флагманский дальнемагистральный самолёт",
-            image: "./img/Il-96-300.jpg",
+            image: "./img/Ил-96-300.jpg",
             baseRunway: 3000
         },
         {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             range: "6500 км",
             passengers: "210",
             description: "Среднемагистральный пассажирский самолёт",
-            image: "./img/Tu-214.jpg",
+            image: "./img/Ту-214.jpg",
             baseRunway: 2500
         },
         {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             range: "2900 км",
             passengers: "120",
             description: "Надёжный региональный лайнер",
-            image: "./img/Yak-42.jpg",
+            image: "./img/Як-42.jpeg",
             baseRunway: 2000
         },
         {
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             range: "2200 км",
             passengers: "85",
             description: "Компактный региональный самолёт",
-            image: "./img/An-148.jpg",
+            image: "./img/Ан-148.jpg",
             baseRunway: 1700
         }
     ];
