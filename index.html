@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="./css/auth.css">
     <link rel="stylesheet" href="./css/aircraft.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Подключаем библиотеки -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-customfonts/0.0.4/jspdf.customfonts.min.js"></script>
+    <script>
+        window.jsPDF = window.jspdf.jsPDF;
+    </script>
+    <script src="./js/pdf-generator.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/main.js"></script>    
 </head>
 <body>
     <!-- Главный баннер с кнопкой -->
@@ -94,10 +103,33 @@
                 </div>
             </div>
             
-            <div class="form-group">
-                <label for="airport">Аэропорт</label>
-                <input type="text" id="airport" required>
-            </div>
+            <!-- Добавить после блока с датой/временем и перед блоком с температурой -->
+<div class="form-group">
+    <label for="airportName">Название аэродрома</label>
+    <input type="text" id="airportName" value="MOSCOW/VNUKOVO" required>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="icaoCode">Код по ИКАО</label>
+        <input type="text" id="icaoCode" value="UUWW" required maxlength="4">
+    </div>
+    <div class="form-group">
+        <label for="airportElevation">Высота аэродрома, м</label>
+        <input type="number" id="airportElevation" value="209" required>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="latitude">Широта</label>
+        <input type="text" id="latitude" value="с 55.35.56" required>
+    </div>
+    <div class="form-group">
+        <label for="longitude">Долгота</label>
+        <input type="text" id="longitude" value="в 37.16.31" required>
+    </div>
+</div>
             
             <div class="form-row">
                 <div class="form-group">
@@ -170,12 +202,23 @@
         <button class="close-modal" id="closeCalcModal">×</button>
     </div>
 </div>
+<!-- Модальное окно результатов -->
+<div class="result-modal" id="resultModal">
+    <div class="result-content">
+        <h3>Результаты расчёта</h3>
+        <div class="result-data" id="resultData">
+            <!-- Сюда будут вставлены данные -->
+        </div>
+        <div class="result-buttons">
+            <button id="downloadPdf" class="btn-primary">Скачать PDF</button>
+            <button id="closeResultModal" class="btn-secondary">Закрыть</button>
+        </div>
+        <button class="close-modal">×</button>
+    </div>
+</div>
     <!-- Подвал -->
     <footer class="footer">
         <p>© 2023 Авиакомпания. Все права защищены.</p>
     </footer>
-
-    <script src="./js/auth.js"></script>
-    <script src="./js/main.js"></script>
 </body>
 </html>

@@ -303,3 +303,82 @@ body {
         padding: 10px;
     }
 }
+/* Можно добавить в конец файла */
+#icaoCode {
+    text-transform: uppercase;
+}
+
+/* Для полей координат */
+#latitude, #longitude {
+    font-family: monospace;
+}
+/* Стили для окна результатов */
+.result-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.result-data {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f9fafb;
+    border-radius: 5px;
+    border: 1px solid #e1e5eb;
+}
+
+.result-data table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.result-data th, .result-data td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e1e5eb;
+}
+
+.result-data th {
+    color: #003366;
+    font-weight: 500;
+    width: 40%;
+}
+
+.result-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-secondary {
+    background: #f0f4f8;
+    color: #334155;
+    border: 1px solid #d1d5db;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+}
