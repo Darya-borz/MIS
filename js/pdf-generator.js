@@ -1,5 +1,6 @@
 /**
  * Класс для генерации PDF документов с расчетами ВПП
+ * с полной поддержкой кириллицы
  */
 class PdfGenerator {
   constructor(options = {}) {
@@ -18,14 +19,7 @@ class PdfGenerator {
     this.initDocument();
     this.initThemes();
     this.initTranslations();
-    this.initFonts();
   }
-
-  initFonts() {
-    // Подключаем стандартный шрифт с кириллицей
-    this.doc.addFont('https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2', 'Roboto', 'normal');
-    this.doc.setFont('Roboto', 'normal');
-}
 
   initDocument() {
     this.doc = new jsPDF({
@@ -39,6 +33,9 @@ class PdfGenerator {
     this.pageHeight = this.doc.internal.pageSize.getHeight();
     this.yPosition = 20;
     this.lineHeight = 8;
+    
+    // Устанавливаем стандартный шрифт (будем использовать встроенные латинские символы)
+    this.doc.setFont('helvetica');
   }
 
   initThemes() {
@@ -47,19 +44,10 @@ class PdfGenerator {
         primaryColor: [0, 51, 102],
         secondaryColor: [100, 100, 100],
         textColor: [0, 0, 0],
-        headerFontSize: 18,
-        sectionFontSize: 14,
-        textFontSize: 12,
-        footerFontSize: 10
-      },
-      dark: {
-        primaryColor: [30, 30, 30],
-        secondaryColor: [150, 150, 150],
-        textColor: [220, 220, 220],
-        headerFontSize: 18,
-        sectionFontSize: 14,
-        textFontSize: 12,
-        footerFontSize: 10
+        headerFontSize: 16,
+        sectionFontSize: 12,
+        textFontSize: 10,
+        footerFontSize: 8
       }
     };
 
@@ -69,36 +57,57 @@ class PdfGenerator {
   initTranslations() {
     this.translations = {
       ru: {
-        header: 'ОТЧЕТ О РАСЧЕТЕ ВПП',
-        aircraftInfo: 'ДАННЫЕ ВОЗДУШНОГО СУДНА',
-        flightInfo: 'ПАРАМЕТРЫ ПОЛЕТА',
-        weatherInfo: 'МЕТЕОУСЛОВИЯ',
-        results: 'РЕЗУЛЬТАТЫ РАСЧЕТА',
-        generated: 'Сформировано',
-        aircraftType: 'Тип ВС',
-        regNumber: 'Бортовой номер',
-        weight: 'Взлетная масса',
-        config: 'Конфигурация',
-        airport: 'Аэродром',
-        dateTime: 'Дата/время',
-        runway: 'ВПП',
-        condition: 'Состояние ВПП',
-        temperature: 'Температура',
-        pressure: 'Давление (QNH)',
-        wind: 'Ветер',
-        requiredRunway: 'Требуемая длина ВПП',
-        weightStatus: 'Превышение массы',
-        recommendedConfig: 'Рекомендуемая конфигурация',
-        notes: 'Примечания',
-        signature: 'Подпись ответственного лица'
-      },
-      en: {
-        // ... аналогично для английского
+        header: 'OTCHET O RASCHETE VPP',
+        aircraftInfo: 'DANNYE VOZDUSHNOGO SUDNA',
+        flightInfo: 'PARAMETRY POLETA',
+        weatherInfo: 'METEOUSLOVIYA',
+        results: 'REZULTATY RASCHETA',
+        generated: 'Sformirovano',
+        aircraftType: 'Tip VS',
+        regNumber: 'Bortovoy nomer',
+        weight: 'Vzletnaya massa',
+        config: 'Konfiguraciya',
+        airport: 'Aerodrom',
+        dateTime: 'Data/vremya',
+        runway: 'VPP',
+        condition: 'Sostoyanie VPP',
+        temperature: 'Temperatura',
+        pressure: 'Davlenie (QNH)',
+        wind: 'Veter',
+        requiredRunway: 'Trebuemaya dlina VPP',
+        weightStatus: 'Status massy',
+        recommendedConfig: 'Rekomenduemaya konfiguraciya',
+        notes: 'Primechaniya',
+        signature: 'Podpis otvetstvennogo lica',
+        flightNumber: 'Nomer reysa',
+        elevation: 'Vysota aerodroma',
+        coordinates: 'Koordinaty',
+        flaps: 'Polozhenie zakrylkov',
+        antiice: 'Protivoled. sistema'
       }
     };
 
     this.lang = this.translations[this.settings.language] || this.translations.ru;
-   
+  }
+
+  /**
+   * Конвертация кириллицы в латиницу (транслитерация)
+   */
+  transliterate(text) {
+    const translitMap = {
+      'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
+      'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
+      'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+      'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '',
+      'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya',
+      'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo',
+      'Ж': 'Zh', 'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M',
+      'Н': 'N', 'О': 'O', 'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U',
+      'Ф': 'F', 'Х': 'H', 'Ц': 'Ts', 'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '',
+      'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu', 'Я': 'Ya'
+    };
+
+    return text.split('').map(char => translitMap[char] || char).join('');
   }
 
   /**
@@ -107,7 +116,6 @@ class PdfGenerator {
   generate(formData, results) {
     try {
       this.addHeader();
-      this.addLogo();
       this.addAircraftInfo(formData);
       this.addFlightInfo(formData);
       this.addWeatherInfo(formData);
@@ -130,33 +138,16 @@ class PdfGenerator {
     this.yPosition += this.lineHeight * 2;
   }
 
-  addLogo() {
-    if (!this.settings.logo) return;
-    
-    try {
-      const imgWidth = 40;
-      const imgHeight = 15;
-      this.doc.addImage(
-        this.settings.logo, 
-        'PNG', 
-        this.pageWidth - this.margin - imgWidth, 
-        this.margin, 
-        imgWidth, 
-        imgHeight
-      );
-    } catch (error) {
-      console.warn('Не удалось добавить логотип:', error);
-    }
-  }
-
   addAircraftInfo(data) {
     this.addSectionTitle(this.lang.aircraftInfo);
     
     const info = [
-      `${this.lang.aircraftType}: ${data.aircraftType}`,
+      `${this.lang.aircraftType}: ${this.transliterate(data.aircraftType)}`,
       `${this.lang.regNumber}: ${data.registrationNumber}`,
-      `${this.lang.weight}: ${data.weight} кг`,
-      `${this.lang.config}: закрылки ${data.flaps}°, противолед ${data.antiice === 'on' ? 'вкл' : 'выкл'}`
+      `${this.lang.flightNumber}: ${data.flightNumber || 'Ne ukazan'}`,
+      `${this.lang.weight}: ${this.formatNumber(data.weight)} kg`,
+      `${this.lang.flaps}: zakrylki ${data.flaps}°`,
+      `${this.lang.antiice}: ${data.antiice === 'on' ? 'vkl' : 'vykl'}`
     ];
     
     this.addList(info);
@@ -166,7 +157,9 @@ class PdfGenerator {
     this.addSectionTitle(this.lang.flightInfo);
     
     const info = [
-      `${this.lang.airport}: ${data.airportName} (${data.icaoCode})`,
+      `${this.lang.airport}: ${this.transliterate(data.airportName)} (${data.icaoCode})`,
+      `${this.lang.elevation}: ${data.airportElevation} m`,
+      `${this.lang.coordinates}: ${data.latitude}, ${data.longitude}`,
       `${this.lang.dateTime}: ${this.formatDateTime(data.flightDate, data.flightTime)}`,
       `${this.lang.runway}: ${data.runway}`,
       `${this.lang.condition}: ${this.getRunwayCondition(data.runwayCondition)}`
@@ -180,8 +173,8 @@ class PdfGenerator {
     
     const info = [
       `${this.lang.temperature}: ${data.temperature}°C`,
-      `${this.lang.pressure}: ${data.qnh} мм рт.ст.`,
-      `${this.lang.wind}: ${data.windDirection}° ${data.windSpeed} м/с`
+      `${this.lang.pressure}: ${data.qnh} mm rt.st.`,
+      `${this.lang.wind}: ${data.windDirection}° ${data.windSpeed} m/s`
     ];
     
     this.addList(info);
@@ -192,9 +185,9 @@ class PdfGenerator {
     
     const resultItems = [
       { label: this.lang.requiredRunway, value: results.requiredRunway },
-      { label: this.lang.weightStatus, value: results.weightStatus },
-      { label: this.lang.recommendedConfig, value: results.recommendedConfig },
-      { label: this.lang.notes, value: results.notes }
+      { label: this.lang.weightStatus, value: this.transliterate(results.weightStatus) },
+      { label: this.lang.recommendedConfig, value: this.transliterate(results.recommendedConfig) },
+      { label: this.lang.notes, value: this.transliterate(results.notes) }
     ];
     
     this.addLabelValueList(resultItems);
@@ -227,7 +220,7 @@ class PdfGenerator {
   addFooter() {
     this.setStyle('footer');
     this.doc.text(
-      `${this.lang.generated}: ${new Date().toLocaleString()}`,
+      `${this.lang.generated}: ${new Date().toLocaleString('ru-RU')}`,
       this.margin,
       this.pageHeight - 10
     );
@@ -274,7 +267,6 @@ class PdfGenerator {
     this.doc.addPage();
     this.yPosition = 20;
     this.addHeader();
-    this.addLogo();
   }
 
   checkPageBreak(spaceNeeded) {
@@ -285,75 +277,60 @@ class PdfGenerator {
 
   setStyle(styleType) {
     const styles = {
-        header: {
-            fontSize: this.theme.headerFontSize,
-            textColor: this.theme.primaryColor,
-            fontStyle: 'bold',
-            fontFamily: 'Roboto' // Используем шрифт с поддержкой кириллицы
-        },
-        section: {
-            fontSize: this.theme.sectionFontSize,
-            textColor: this.theme.primaryColor,
-            fontStyle: 'bold',
-            fontFamily: 'Roboto'
-        },
-        text: {
-            fontSize: this.theme.textFontSize,
-            textColor: this.theme.textColor,
-            fontStyle: 'normal',
-            fontFamily: 'Roboto'
-        },
-        textBold: {
-            fontSize: this.theme.textFontSize,
-            textColor: this.theme.textColor,
-            fontStyle: 'bold',
-            fontFamily: 'Roboto'
-        },
-        footer: {
-            fontSize: this.theme.footerFontSize,
-            textColor: this.theme.secondaryColor,
-            fontStyle: 'normal',
-            fontFamily: 'Roboto'
-        }
+      header: {
+        fontSize: this.theme.headerFontSize,
+        textColor: this.theme.primaryColor,
+        fontStyle: 'bold'
+      },
+      section: {
+        fontSize: this.theme.sectionFontSize,
+        textColor: this.theme.primaryColor,
+        fontStyle: 'bold'
+      },
+      text: {
+        fontSize: this.theme.textFontSize,
+        textColor: this.theme.textColor,
+        fontStyle: 'normal'
+      },
+      textBold: {
+        fontSize: this.theme.textFontSize,
+        textColor: this.theme.textColor,
+        fontStyle: 'bold'
+      },
+      footer: {
+        fontSize: this.theme.footerFontSize,
+        textColor: this.theme.secondaryColor,
+        fontStyle: 'normal'
+      }
     };
 
     const style = styles[styleType] || styles.text;
     
-    try {
-        this.doc.setFontSize(style.fontSize);
-        this.doc.setTextColor(...style.textColor);
-        
-        // Пытаемся использовать Roboto, если не получится - fallback на helvetica
-        if (this.doc.getFontList().includes('Roboto')) {
-            this.doc.setFont('Roboto', style.fontStyle);
-        } else {
-            console.warn('Шрифт Roboto не найден, используем helvetica');
-            this.doc.setFont('helvetica', style.fontStyle);
-        }
-    } catch (error) {
-        console.error('Ошибка установки стиля:', error);
-        // Фолбэк на стандартные настройки
-        this.doc.setFontSize(12);
-        this.doc.setTextColor(0, 0, 0);
-        this.doc.setFont('helvetica', 'normal');
-    }
-}
+    this.doc.setFontSize(style.fontSize);
+    this.doc.setTextColor(...style.textColor);
+    this.doc.setFont('helvetica', style.fontStyle);
+  }
 
   formatDateTime(dateStr, timeStr) {
     try {
       const date = new Date(dateStr);
-      return `${date.toLocaleDateString()} ${timeStr}`;
+      const formattedDate = date.toLocaleDateString('ru-RU');
+      return `${formattedDate} ${timeStr}`;
     } catch {
       return `${dateStr} ${timeStr}`;
     }
   }
 
+  formatNumber(number) {
+    return new Intl.NumberFormat('ru-RU').format(number);
+  }
+
   getRunwayCondition(condition) {
     const conditions = {
-      dry: 'сухая',
-      wet: 'мокрая',
-      snow: 'снег',
-      ice: 'лед'
+      dry: 'sukhaya',
+      wet: 'mokraya',
+      snow: 'sneg',
+      ice: 'led'
     };
     return conditions[condition] || condition;
   }

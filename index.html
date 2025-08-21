@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Авиационные расчёты | Авиакомпания</title>
-    <link rel="stylesheet" href="./CSS/style.css">
-    <link rel="stylesheet" href="./CSS/auth.css">
-    <link rel="stylesheet" href="./CSS/aircraft.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/auth.css">
+    <link rel="stylesheet" href="./css/aircraft.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- Подключаем библиотеки -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-customfonts/0.0.4/jspdf.customfonts.min.js"></script>
+    
     <script>
         window.jsPDF = window.jspdf.jsPDF;
     </script>
-    <script src="./js/pdf-generator.js"></script>
-    <script src="./js/auth.js"></script>
-    <script src="./js/main.js"></script>    
 </head>
+
 <body>
     <!-- Главный баннер с кнопкой -->
     <section class="hero">
@@ -59,166 +60,186 @@
         <button id="logoutBtn" class="logout-btn">Выйти</button>
     </div>
 
-
     <!-- Каталог самолетов -->
-<section class="catalog">
-    <div class="section-title">
-        <h2>Наш флот</h2>
-        <p>Выберите воздушное судно для расчёта взлётно-посадочных характеристик</p>
-    </div>
-    
-    <div class="aircraft-grid" id="aircraftGrid">
-        <!-- Карточки будут добавлены через JavaScript -->
-    </div>
-</section>
-<!-- Модальное окно расчётов -->
-<div class="calc-modal" id="calcModal">
-    <div class="calc-form">
-        <h3>Расчёт взлётно-посадочных характеристик</h3>
-        <form id="calcForm">
-            <div class="form-group">
-                <label for="aircraftType">Тип ВС</label>
-                <input type="text" id="aircraftType" readonly>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="flightNumber">№ рейса</label>
-                    <input type="text" id="flightNumber" required>
-                </div>
-                <div class="form-group">
-                    <label for="registrationNumber">Бортовой номер</label>
-                    <input type="text" id="registrationNumber" readonly>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="flightDate">Дата</label>
-                    <input type="date" id="flightDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="flightTime">Время</label>
-                    <input type="time" id="flightTime" required>
-                </div>
-            </div>
-            
-            <!-- Добавить после блока с датой/временем и перед блоком с температурой -->
-<div class="form-group">
-    <label for="airportName">Название аэродрома</label>
-    <input type="text" id="airportName" value="MOSCOW/VNUKOVO" required>
-</div>
-
-<div class="form-row">
-    <div class="form-group">
-        <label for="icaoCode">Код по ИКАО</label>
-        <input type="text" id="icaoCode" value="UUWW" required maxlength="4">
-    </div>
-    <div class="form-group">
-        <label for="airportElevation">Высота аэродрома, м</label>
-        <input type="number" id="airportElevation" value="209" required>
-    </div>
-</div>
-
-<div class="form-row">
-    <div class="form-group">
-        <label for="latitude">Широта</label>
-        <input type="text" id="latitude" value="с 55.35.56" required>
-    </div>
-    <div class="form-group">
-        <label for="longitude">Долгота</label>
-        <input type="text" id="longitude" value="в 37.16.31" required>
-    </div>
-</div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="temperature">Температура воздуха, °C</label>
-                    <input type="number" id="temperature" required>
-                </div>
-                <div class="form-group">
-                    <label for="qnh">QNH, мм рт.ст.</label>
-                    <input type="number" id="qnh" required>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="windDirection">Направление ветра, °</label>
-                    <input type="number" id="windDirection" min="0" max="360" required>
-                </div>
-                <div class="form-group">
-                    <label for="windSpeed">Скорость ветра, м/с</label>
-                    <input type="number" id="windSpeed" required>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="runway">ВПП</label>
-                <input type="text" id="runway" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="runwayCondition">Состояние ВПП</label>
-                <select id="runwayCondition" required>
-                    <option value="dry">Сухая</option>
-                    <option value="wet">Мокрая</option>
-                    <option value="snow">Снег</option>
-                    <option value="ice">Лёд</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="weight">Взлётная масса, кг</label>
-                <input type="number" id="weight" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="flaps">Положение закрылков</label>
-                <select id="flaps" required>
-                    <option value="0">0°</option>
-                    <option value="5">5°</option>
-                    <option value="10">10°</option>
-                    <option value="15">15°</option>
-                    <option value="20">20°</option>
-                    <option value="25">25°</option>
-                    <option value="30">30°</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="antiice">Противобледенительная система</label>
-                <select id="antiice" required>
-                    <option value="off">Выкл</option>
-                    <option value="on">Вкл</option>
-                </select>
-            </div>
-            
-            <div class="form-buttons">
-                <button type="submit" class="calc-submit-btn">Рассчитать</button>
-                <button type="button" class="calc-cancel-btn" id="cancelCalc">Отмена</button>
-            </div>
-        </form>
-        <button class="close-modal" id="closeCalcModal">×</button>
-    </div>
-</div>
-<!-- Модальное окно результатов -->
-<div class="result-modal" id="resultModal">
-    <div class="result-content">
-        <h3>Результаты расчёта</h3>
-        <div class="result-data" id="resultData">
-            <!-- Сюда будут вставлены данные -->
+    <section class="catalog">
+        <div class="section-title">
+            <h2>Наш флот</h2>
+            <p>Выберите воздушное судно для расчёта взлётно-посадочных характеристик</p>
         </div>
-        <div class="result-buttons">
-            <button id="downloadPdf" class="btn-primary">Скачать PDF</button>
-            <button id="closeResultModal" class="btn-secondary">Закрыть</button>
+
+        <div class="aircraft-grid" id="aircraftGrid">
+            <!-- Карточки будут добавлены через JavaScript -->
         </div>
-        <button class="close-modal">×</button>
+    </section>
+
+    <!-- Модальное окно расчётов -->
+    <div class="calc-modal" id="calcModal">
+        <div class="calc-form">
+            <h3>Расчёт взлётно-посадочных характеристик</h3>
+            <form id="calcForm">
+                <div class="form-group">
+                    <label for="aircraftType">Тип ВС</label>
+                    <input type="text" id="aircraftType" readonly>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="flightNumber">№ рейса</label>
+                        <input type="text" id="flightNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registrationNumber">Бортовой номер</label>
+                        <input type="text" id="registrationNumber" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="flightDate">Дата</label>
+                        <input type="date" id="flightDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="flightTime">Время</label>
+                        <input type="time" id="flightTime" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="airportName">Название аэродрома</label>
+                    <input type="text" id="airportName" value="MOSCOW/VNUKOVO" required>
+                </div>
+
+                <!-- Обновите этот блок в форме расчетов -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="icaoCode">Код по ИКАО</label>
+                        <div class="icao-search-container">
+                            <input type="text" id="icaoCode" value="UUWW" required maxlength="4">
+                            <div class="suggestions-container">
+                                <div class="suggestions-list" id="icaoSuggestions" style="display: none;"></div>
+                            </div>
+                            <button type="button" id="icaoSearchBtn" class="btn-secondary">Найти</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="airportElevation">Высота аэродрома, м</label>
+                        <input type="number" id="airportElevation" value="209" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="latitude">Широта</label>
+                        <input type="text" id="latitude" value="с 55.35.56" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="longitude">Долгота</label>
+                        <input type="text" id="longitude" value="в 37.16.31" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="temperature">Температура воздуха, °C</label>
+                        <input type="number" id="temperature" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="qnh">QNH, мм рт.ст.</label>
+                        <input type="number" id="qnh" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="windDirection">Направление ветра, °</label>
+                        <input type="number" id="windDirection" min="0" max="360" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="windSpeed">Скорость ветра, м/с</label>
+                        <input type="number" id="windSpeed" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="runway">ВПП</label>
+                    <select id="runway" required>
+                        <option value="dry">Сухая</option>
+                        <option value="wet">Мокрая</option>
+                        <option value="snow">Снег</option>
+                        <option value="ice">Лёд</option>
+                        <!-- Варианты будут заполнены автоматически -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="runwayCondition">Состояние ВПП</label>
+                    <select id="runwayCondition" required>
+                        <option value="dry">Сухая</option>
+                        <option value="wet">Мокрая</option>
+                        <option value="snow">Снег</option>
+                        <option value="ice">Лёд</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Взлётная масса, кг</label>
+                    <input type="number" id="weight" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="flaps">Положение закрылков</label>
+                    <select id="flaps" required>
+                        <option value="0">0°</option>
+                        <option value="5">5°</option>
+                        <option value="10">10°</option>
+                        <option value="15">15°</option>
+                        <option value="20">20°</option>
+                        <option value="25">25°</option>
+                        <option value="30">30°</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="antiice">Противобледенительная система</label>
+                    <select id="antiice" required>
+                        <option value="off">Выкл</option>
+                        <option value="on">Вкл</option>
+                    </select>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="calc-submit-btn">Рассчитать</button>
+                    <button type="button" class="calc-cancel-btn" id="cancelCalc">Отмена</button>
+                </div>
+            </form>
+            <button class="close-modal" id="closeCalcModal">×</button>
+        </div>
     </div>
-</div>
+
+    <!-- Модальное окно результатов -->
+    <div class="result-modal" id="resultModal">
+        <div class="result-content">
+            <h3>Результаты расчёта</h3>
+            <div class="result-data" id="resultData">
+                <!-- Сюда будут вставлены данные -->
+            </div>
+            <div class="result-buttons">
+                <button id="downloadPdf" class="btn-primary">Скачать PDF</button>
+                <button id="closeResultModal" class="btn-secondary">Закрыть</button>
+            </div>
+            <button class="close-modal">×</button>
+        </div>
+    </div>
+
     <!-- Подвал -->
     <footer class="footer">
         <p>© 2023 Авиакомпания. Все права защищены.</p>
     </footer>
+
+    <!-- Подключаем скрипты -->
+    <script src="./js/pdf-generator.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/main.js"></script>
 </body>
+
 </html>
